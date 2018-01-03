@@ -7,7 +7,7 @@
 
 ## 示例图片
 
-![image](https://github.com/shiyingfeng/NBBannerView/raw/master/Gif/1.gif)
+![image](https://github.com/shiyingfeng/NBBannerView/raw/master/Example/Gif/1.gif)
 
 ## 使用方式
 ```iOS
