@@ -1,0 +1,6 @@
+framework module NBBannerView {
+  umbrella header "NBBannerView-umbrella.h"
+
+  export *
+  module * { export * }
+}

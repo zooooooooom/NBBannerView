@@ -1,0 +1,24 @@
+PODS:
+  - Masonry (1.1.0)
+  - NBBannerView (0.1.0):
+    - Masonry
+    - SDWebImage
+  - SDWebImage (4.2.2):
+    - SDWebImage/Core (= 4.2.2)
+  - SDWebImage/Core (4.2.2)
+
+DEPENDENCIES:
+  - NBBannerView (from `../`)
+
+EXTERNAL SOURCES:
+  NBBannerView:
+    :path: ../
+
+SPEC CHECKSUMS:
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  NBBannerView: d84f670e3b3392d2da4df28f6d8cbe65c78164ae
+  SDWebImage: 89a9d32cd520bbb46eb14e541d5109b3564af198
+
+PODFILE CHECKSUM: c2ef406a6b39f8391f7487f2b451af73c282abb6
+
+COCOAPODS: 1.3.1

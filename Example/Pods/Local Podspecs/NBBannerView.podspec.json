@@ -1,0 +1,30 @@
+{
+  "name": "NBBannerView",
+  "version": "0.1.0",
+  "summary": "A short description of NBBannerView.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/shiyingfeng/NBBannerView",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "shiyingfeng": "shiyingfeng@ccahouse.org"
+  },
+  "source": {
+    "git": "https://github.com/shiyingfeng/NBBannerView.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "NBBannerView/Classes/**/*",
+  "dependencies": {
+    "Masonry": [
+
+    ],
+    "SDWebImage": [
+
+    ]
+  }
+}
