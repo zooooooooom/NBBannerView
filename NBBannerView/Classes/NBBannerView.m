@@ -255,10 +255,9 @@ static NSInteger kLength = 10000;
     [self stopTimer];
     [self startTimer];
     
-//    if (self.delegate &&
-//        [self.delegate respondsToSelector:@selector(HZBannerView:didSelectedAt:)]) {
-//        [self.delegate HZBannerView:self didSelectedAt:indexPath.row];
-//    }
+    if (self.bannarClickBlock && self.bannerModels.count>0) {
+        self.bannarClickBlock(self.pageControl.currentPage);
+    }
 }
 
 

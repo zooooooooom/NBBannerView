@@ -57,6 +57,11 @@
     }
     
     bannerV.bannerModels = arrM;
+    
+    
+    bannerV.bannarClickBlock = ^(NSInteger index) {
+        NSLog(@"点击了%zd",index);
+    };
 }
 
 - (void)didReceiveMemoryWarning
