@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'NBBannerView_Example' do
+  pod 'NBBannerView', :path => '../'
+
+  target 'NBBannerView_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
