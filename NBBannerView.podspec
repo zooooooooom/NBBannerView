@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'NBBannerView'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of NBBannerView.'
+  s.summary          = '卡片式轮播图'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,13 +18,13 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+支持masonry 和 旋转  卡片式轮播图
                        DESC
 
   s.homepage         = 'https://github.com/shiyingfeng/NBBannerView'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'shiyingfeng' => 'shiyingfeng@ccahouse.org' }
+  s.author           = { 'shiyingfeng' => '260497176@qq.com' }
   s.source           = { :git => 'https://github.com/shiyingfeng/NBBannerView.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
