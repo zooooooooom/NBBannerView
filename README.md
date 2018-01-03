@@ -51,7 +51,7 @@ pod 'NBBannerView'
 
 ## Author
 
-shiyingfeng, shiyingfeng@ccahouse.org
+shiyingfeng, 260497176@qq.com
 
 ## License
 
