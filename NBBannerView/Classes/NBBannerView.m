@@ -45,7 +45,7 @@ static NSInteger kLength = 10;
 @implementation NBBannerView
 
 //
-- (void)setBannerModels:(NSMutableArray<id<NBBannerModelProtocol>> *)bannerModels
+- (void)setBannerModels:(NSArray<id<NBBannerModelProtocol>> *)bannerModels
 {
     
     if (bannerModels.count == 0) { return; }
@@ -107,6 +107,7 @@ static NSInteger kLength = 10;
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    if (!self.bannerModels) { return; }
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
 }
 
