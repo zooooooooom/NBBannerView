@@ -33,9 +33,9 @@
     NBBannerView *bannerV = [NBBannerView bannerViewWithConfig:^(NBBannerConfig *config) {
 //        config.blurEffectViewColor = [UIColor redColor];
         config.showBlurEffectView = YES;
-        config.showText = NO;
-//        config.textColor = [UIColor purpleColor];
-//        config.textFontSize = 36;
+        config.showText = YES;
+        config.textColor = [UIColor purpleColor];
+        config.textFontSize = 36;
     } loadImageBlock:^(UIImageView *imageView, NSURL *url) {
         [imageView sd_setImageWithURL:url placeholderImage:nil];
     } loadBlurEffectBlock:^(UIImageView *imageView, NSURL *url) {

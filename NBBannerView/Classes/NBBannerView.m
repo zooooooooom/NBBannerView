@@ -14,7 +14,7 @@
 #import "Masonry.h"
 #import "NBBannerConfig.h"
 
-static NSInteger kLength = 10000;
+static NSInteger kLength = 10;
 
 @interface NBBannerView()<UICollectionViewDelegateFlowLayout,UICollectionViewDelegate,UICollectionViewDataSource>
 {
@@ -50,15 +50,9 @@ static NSInteger kLength = 10000;
     
     if (bannerModels.count == 0) { return; }
     //处理模型 实现无限滚动
+    _bannerModels = bannerModels;
     
-    NSMutableArray *modelsM = [NSMutableArray array];
-    
-    for (NSInteger i = 0; i<kLength; i++) {
-        [modelsM addObjectsFromArray:bannerModels];
-    }
     _currentIndex = kLength/2*bannerModels.count;//bannerModels.count * 1000;
-    
-    _bannerModels = modelsM;
     
     // 设置背景等属性
     self.imageView.subviews.firstObject.hidden = !self.config.isShowBlurEffectView;
@@ -76,8 +70,6 @@ static NSInteger kLength = 10000;
     }
     [self.collectionView reloadData];
     [self layoutIfNeeded];
-//    _currentIndex = (bannerModels.count == 1) ? 2 : _bannerModels.count/3;
-//    NSLog(@"%zd唯一%ld",bannerModels.count,_currentIndex);
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
     //开启定时器
     [self stopTimer];
@@ -112,6 +104,12 @@ static NSInteger kLength = 10000;
     [self pageControl];
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+}
+
 #pragma mark - 私有方法
 //配置cell居中
 - (void)fixCellToCenter {
@@ -132,24 +130,13 @@ static NSInteger kLength = 10000;
 
 - (void)scrollToCenter {
     
-    //在这写入要计算时间的代码
-//    CFAbsoluteTime startTime =CFAbsoluteTimeGetCurrent();
-    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
-    
-    id <NBBannerModelProtocol>model = self.bannerModels[_currentIndex];
-    if (self.loadBlurEffectBlock && self.config.showBlurEffectView) {
-        self.loadBlurEffectBlock(self.imageView, model.adImgURL);
-    }
-    
-    self.pageControl.currentPage = _currentIndex%(self.bannerModels.count/kLength);
-
     //如果是最后一张图
-    if (_currentIndex == self.bannerModels.count - 1) {
-        _currentIndex = kLength/2*(self.bannerModels.count/kLength)+(self.bannerModels.count/kLength-1);
+    if (_currentIndex == self.bannerModels.count*kLength - 1) {
+        _currentIndex = kLength/2*self.bannerModels.count-1;
         
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
         
-        id <NBBannerModelProtocol>model = self.bannerModels[_currentIndex];
+        id <NBBannerModelProtocol>model = self.bannerModels[_currentIndex%self.bannerModels.count];
         if (self.loadBlurEffectBlock && self.config.showBlurEffectView) {
             self.loadBlurEffectBlock(self.imageView, model.adImgURL);
         }
@@ -158,32 +145,45 @@ static NSInteger kLength = 10000;
     //第一张图
     else if (_currentIndex == 0) {
         
-        _currentIndex = kLength/2*(self.bannerModels.count/kLength);
-//        NSLog(@"+++++%ld",_currentIndex);
+        _currentIndex = kLength/2*self.bannerModels.count;;
+        //        NSLog(@"+++++%ld",_currentIndex);
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
         
-        id <NBBannerModelProtocol>model = self.bannerModels[_currentIndex];
+        id <NBBannerModelProtocol>model = self.bannerModels[_currentIndex%self.bannerModels.count];
         if (self.loadBlurEffectBlock && self.config.showBlurEffectView) {
             self.loadBlurEffectBlock(self.imageView, model.adImgURL);
         }
         return;
     }
+    
+    //在这写入要计算时间的代码
+//    CFAbsoluteTime startTime =CFAbsoluteTimeGetCurrent();
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+    
+    id <NBBannerModelProtocol>model = self.bannerModels[_currentIndex%self.bannerModels.count];
+    if (self.loadBlurEffectBlock && self.config.showBlurEffectView) {
+        self.loadBlurEffectBlock(self.imageView, model.adImgURL);
+    }
+    
+    self.pageControl.currentPage = _currentIndex%(self.bannerModels.count%kLength);
+
+    
 }
 
 
 #pragma mark - 数据源
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.bannerModels.count;
+    return self.bannerModels.count*kLength;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    id <NBBannerModelProtocol>bannarM = self.bannerModels[indexPath.item];
+    id <NBBannerModelProtocol>bannarM = self.bannerModels[indexPath.item%self.bannerModels.count];
     NBBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([NBBannerCell class]) forIndexPath:indexPath];
     cell.config = self.config;
     cell.bannerModel = bannarM;
-//    cell.textLabel.text = [NSString stringWithFormat:@"%zd",indexPath.item];
+    cell.textLabel.text = [NSString stringWithFormat:@"%zd",indexPath.item];
     if (self.loadImgBlock) {
         self.loadImgBlock(cell.imageView, bannarM.adImgURL);
     }
@@ -268,8 +268,8 @@ static NSInteger kLength = 10000;
 
 #pragma mark - 定时器相关
 - (void)startTimer {
-    //如果只有一张图片，则直接返回，不开启定时器
-    if (self.bannerModels.count <= 1) return;
+    //如果只有一张图片，则直接返回，开启定时器
+    if (self.bannerModels.count == 0) return;
     //如果定时器已开启，先停止再重新开启
     if (_timer){
         [self stopTimer];
