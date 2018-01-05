@@ -22,8 +22,7 @@
         _kCardHorizontalSpace = 20;
         _midCardEdgeInsets = UIEdgeInsetsMake(10, 30, 20, 30);//UIEdgeInsetsZero;
         _bgColor = [UIColor clearColor];
-        _blurEffectViewColor = [UIColor whiteColor];
-        _showBlurEffectView = YES;
+        _showBlurEffectView = NO;
         _timeInterval = 2;
         _pageIndicatorTintColor = [UIColor whiteColor];
         _currentPageIndicatorTintColor = [UIColor orangeColor];

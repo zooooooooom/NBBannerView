@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'NBBannerView'
-  s.version          = '0.3.0'
+  s.version          = '0.3.1'
   s.summary          = '卡片式轮播图'
 
 # This description is used to generate tags and improve search results.

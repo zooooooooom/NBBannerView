@@ -44,23 +44,15 @@ static NSInteger kLength = 10;
 
 @implementation NBBannerView
 
-//
+// 数据源设置
 - (void)setBannerModels:(NSArray<id<NBBannerModelProtocol>> *)bannerModels
 {
-    
     if (bannerModels.count == 0) { return; }
     //处理模型 实现无限滚动
     _bannerModels = bannerModels;
     
     _currentIndex = kLength/2*bannerModels.count;//bannerModels.count * 1000;
     
-    // 设置背景等属性
-    self.imageView.subviews.firstObject.hidden = !self.config.isShowBlurEffectView;
-    self.collectionView.backgroundColor = self.config.bgColor;
-    self.imageView.backgroundColor = self.config.blurEffectViewColor;
-    // 设置pageControl属性
-    self.pageControl.pageIndicatorTintColor = self.config.pageIndicatorTintColor;
-    self.pageControl.currentPageIndicatorTintColor = self.config.currentPageIndicatorTintColor;
     self.pageControl.numberOfPages = bannerModels.count;
     
     //设置初始位置
@@ -71,37 +63,38 @@ static NSInteger kLength = 10;
     [self.collectionView reloadData];
     [self layoutIfNeeded];
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    
     //开启定时器
     [self stopTimer];
     [self startTimer];
 
 }
 
-
+/**
+ 快速创建方法
+ */
 + (instancetype)bannerViewWithConfig:(NBBannerConfigBlock)bannarConfigBlock loadImageBlock:(NBLoadImageBlock)loadImgBlock  loadBlurEffectBlock:(NBLoadImageBlock)loadBlurEffectBlock
 {
     NBBannerView *bannerView = [[NBBannerView alloc] init];
     if (bannarConfigBlock) {
         bannarConfigBlock(bannerView.config);
     }
+    [bannerView setupConfig];
     bannerView.loadImgBlock = loadImgBlock;
     bannerView.loadBlurEffectBlock = loadBlurEffectBlock;
     return bannerView;
 }
 
+#pragma mark - 系统方法
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
+        
         [self setupUI];
+        
+        [self setupConfig];
     }
     return self;
-}
-
-- (void)setupUI
-{
-    [self collectionView];
-    
-    [self pageControl];
 }
 
 - (void)layoutSubviews
@@ -109,6 +102,33 @@ static NSInteger kLength = 10;
     [super layoutSubviews];
     if (!self.bannerModels) { return; }
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+}
+
+/**
+ 设置界面
+ */
+- (void)setupUI
+{
+    [self imageView];
+    
+    [self collectionView];
+    
+    [self pageControl];
+}
+
+/**
+ 配置属性
+ */
+- (void)setupConfig
+{
+    // 设置pageControl属性
+    self.pageControl.pageIndicatorTintColor = self.config.pageIndicatorTintColor;
+    self.pageControl.currentPageIndicatorTintColor = self.config.currentPageIndicatorTintColor;
+    
+    // 设置背景等属性
+    self.backgroundColor = self.config.bgColor;
+    self.imageView.subviews.firstObject.hidden = !self.config.isShowBlurEffectView;
+    
 }
 
 #pragma mark - 私有方法
@@ -138,7 +158,7 @@ static NSInteger kLength = 10;
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
         
         id <NBBannerModelProtocol>model = self.bannerModels[_currentIndex%self.bannerModels.count];
-        if (self.loadBlurEffectBlock && self.config.showBlurEffectView) {
+        if (self.loadBlurEffectBlock) {
             self.loadBlurEffectBlock(self.imageView, model.adImgURL);
         }
         return;
@@ -151,7 +171,7 @@ static NSInteger kLength = 10;
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
         
         id <NBBannerModelProtocol>model = self.bannerModels[_currentIndex%self.bannerModels.count];
-        if (self.loadBlurEffectBlock && self.config.showBlurEffectView) {
+        if (self.loadBlurEffectBlock) {
             self.loadBlurEffectBlock(self.imageView, model.adImgURL);
         }
         return;
@@ -162,13 +182,12 @@ static NSInteger kLength = 10;
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
     
     id <NBBannerModelProtocol>model = self.bannerModels[_currentIndex%self.bannerModels.count];
-    if (self.loadBlurEffectBlock && self.config.showBlurEffectView) {
+    if (self.loadBlurEffectBlock) {
         self.loadBlurEffectBlock(self.imageView, model.adImgURL);
     }
     
     self.pageControl.currentPage = _currentIndex%(self.bannerModels.count%kLength);
 
-    
 }
 
 
@@ -310,8 +329,7 @@ static NSInteger kLength = 10;
 {
     if (_imageView == nil) {
         _imageView = [[UIImageView alloc] init];
-//        _imageView.backgroundColor = [UIColor redColor];
-//        [self addSubview:_imageView];
+        _imageView.backgroundColor = [UIColor clearColor];
         [self insertSubview:_imageView atIndex:0];
         
         UIBlurEffect* effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
@@ -331,6 +349,7 @@ static NSInteger kLength = 10;
 {
     if (_collectionView == nil) {
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.layout];
+        _collectionView.backgroundColor = [UIColor clearColor];
         _collectionView.pagingEnabled = NO;
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.dataSource = self;

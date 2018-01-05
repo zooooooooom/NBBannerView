@@ -21,6 +21,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+//    self.view.backgroundColor = [UIColor purpleColor];
 	
     
     NSArray *arrData = @[@"http://g.hiphotos.baidu.com/image/pic/item/d8f9d72a6059252d62bebac53d9b033b5ab5b942.jpg",
@@ -31,8 +33,8 @@
     
     
     NBBannerView *bannerV = [NBBannerView bannerViewWithConfig:^(NBBannerConfig *config) {
-//        config.blurEffectViewColor = [UIColor redColor];
         config.showBlurEffectView = YES;
+//        config.bgColor = [UIColor redColor];
         config.showText = YES;
         config.textColor = [UIColor purpleColor];
         config.textFontSize = 36;
